@@ -1,2 +1,2 @@
 # server-management  
-[index](./index.png)
+![index](./index.png)
