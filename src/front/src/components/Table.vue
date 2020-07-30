@@ -43,7 +43,7 @@
                 <v-row>
                   <v-form ref="form" v-model="valid">
                   <v-col cols="12" md="12" v-for="field in fields" v-bind:key="field.name" v-bind:field="field">
-                    <v-select v-if="field.items" v-model="editedItem[field.name]" :items="itemsKeys[field.itemsKey]" :label="field.label" clearable :rules="field.rules">
+                    <v-select v-if="field.items" :disabled="editedIndex > -1 && field.noEditingAllowed" v-model="editedItem[field.name]" :items="itemsKeys[field.itemsKey]" :label="field.label" clearable :rules="field.rules">
                       <template v-slot:prepend-item>
                         <v-text-field
                                 append-icon="mdi-magnify"
@@ -56,7 +56,7 @@
                         <v-divider class="mt-2"></v-divider>
                       </template>
                     </v-select>
-                    <v-text-field v-if="!field.items" v-model="editedItem[field.name]" :label="field.label" :rules="field.rules"></v-text-field>
+                    <v-text-field v-if="!field.items" :disabled="editedIndex > -1 && field.noEditingAllowed" v-model="editedItem[field.name]" :label="field.label" :rules="field.rules"></v-text-field>
                   </v-col>
                   </v-form>
                 </v-row>

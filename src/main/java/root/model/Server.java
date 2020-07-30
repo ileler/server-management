@@ -11,6 +11,8 @@ public class Server implements Serializable {
 
     private static final long serialVersionUID = -2114174612355982255L;
 
+    private String name;
+
     private String group;
 
     private String ip;
@@ -23,9 +25,9 @@ public class Server implements Serializable {
 
     private String desc;
 
-    public String getUrl() {
+    public String getId() {
         if (ip == null && username == null) return null;
-        return "scp://" + ip + ":" + getPort();
+        return username + "@" + ip + ":" + getPort();
     }
 
 }

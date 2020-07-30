@@ -11,9 +11,9 @@ public class Service implements Serializable {
 
     private static final long serialVersionUID = 5320175101570573623L;
 
-    private String server;
-
     private String name;
+
+    private String server;
 
     private String desc;
 

@@ -37,8 +37,8 @@
 
     const GroupsListProxy = {
         items: () => {
-            index.serversFields[0].items = [];
-            index.groupsList.forEach(obj => index.serversFields[0].items.push(obj.name));
+            index.serversFields[1].items = [];
+            index.groupsList.forEach(obj => index.serversFields[1].items.push({text: obj.name, value: obj.name}));
         },
         set: (groupsList) => {
             index.groupsList = groupsList;
@@ -60,8 +60,8 @@
 
     const ServersListProxy = {
         items: () => {
-            index.servicesFields[0].items = [];
-            index.serversList.forEach(obj => index.servicesFields[0].items.push(obj.ip));
+            index.servicesFields[1].items = [];
+            index.serversList.forEach(obj => index.servicesFields[1].items.push({text: obj.name + ' ('+obj.id+')', value: obj.name}));
         },
         set: (groupsList) => {
             index.serversList = groupsList;
@@ -173,10 +173,10 @@
             groupsLoading: false,
             groupsList: [],
             groupsFields: [
-                {name: 'name', label: 'Name', rules: [FormRules.required, FormRules.counter({max: 50})]},
+                {name: 'name', label: 'Name', noEditingAllowed: true, rules: [FormRules.required, FormRules.counter({max: 50})]},
             ],
             groupsHeaders: [
-                {text: 'Name', value: 'name'},
+                {text: 'Name(ID)', value: 'name'},
                 {text: 'Actions', value: 'actions', sortable: false},
             ],
         },
@@ -193,6 +193,7 @@
             serversLoading: false,
             serversList: [],
             serversFields: [
+                {name: 'name', label: 'Name', noEditingAllowed: true, rules: [FormRules.required, FormRules.counter({max: 50})]},
                 {name: 'group', label: 'Group', items: [], rules: [FormRules.required]},
                 {name: 'ip', label: 'IP', rules: [FormRules.required, FormRules.ip]},
                 {name: 'port', label: 'Port', default: 22, rules: [FormRules.required, FormRules.port]},
@@ -201,6 +202,7 @@
                 {name: 'password', label: 'Password', rules: [FormRules.required]},
             ],
             serversHeaders: [
+                {text: 'Name(ID)', value: 'name'},
                 {text: 'Group', value: 'group'},
                 {text: 'IP', value: 'ip'},
                 {text: 'Port', value: 'port'},
@@ -223,15 +225,15 @@
             servicesLoading: false,
             servicesList: [],
             servicesFields: [
+                {name: 'name', label: 'Name', noEditingAllowed: true, rules: [FormRules.required, FormRules.counter({max: 50})]},
                 {name: 'server', label: 'Server', items: [], rules: [FormRules.required]},
-                {name: 'name', label: 'Name', rules: [FormRules.required, FormRules.counter({max: 50})]},
                 {name: 'desc', label: 'Desc'},
                 {name: 'type', label: 'Type'},
                 {name: 'user', label: 'User', default: 'wenwen'},
             ],
             servicesHeaders: [
+                {text: 'Name(ID)', value: 'name'},
                 {text: 'Server', value: 'server'},
-                {text: 'Name', value: 'name'},
                 {text: 'Desc', value: 'desc'},
                 {text: 'Type', value: 'type'},
                 {text: 'User', value: 'user'},
