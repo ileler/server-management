@@ -19,6 +19,7 @@ public class GroupDAOImpl implements GroupDAO {
 
     @Override
     public Boolean add(Group env) {
+        if (get(env.getName()) != null) return false;
         objectDB.addData(env);
         return true;
     }

@@ -19,6 +19,7 @@ public class ServiceDAOImpl implements ServiceDAO {
 
     @Override
     public Boolean add(Service service) {
+        if (get(service.getName()) != null) return false;
         objectDB.addData(service);
         return true;
     }

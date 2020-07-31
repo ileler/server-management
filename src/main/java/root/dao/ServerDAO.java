@@ -9,22 +9,22 @@ public interface ServerDAO {
 
     Boolean add(Server server);
 
-    Boolean del(String ip);
+    Boolean del(String name);
 
     Boolean mod(Server server);
 
     List<Server> get();
 
-    Server get(String ip);
+    Server get(String name);
 
-    String valid(String ip);
+    String valid(String name);
 
-    Streams services(String ip);
+    Streams services(String name);
 
-    Streams kill(String ip, Long pid);
+    Streams kill(String name, Long pid);
 
-    Streams operLogs(String ip);
+    Streams operLogs(String name);
 
-    Streams loginLogs(String ip);
+    Streams loginLogs(String name);
 
 }

@@ -21,8 +21,8 @@ public class ServerServiceImpl implements ServerService {
     }
 
     @Override
-    public Boolean del(String ip) {
-        return serverDAO.del(ip);
+    public Boolean del(String name) {
+        return serverDAO.del(name);
     }
 
     @Override
@@ -36,27 +36,27 @@ public class ServerServiceImpl implements ServerService {
     }
 
     @Override
-    public String valid(String ip) {
-        return serverDAO.valid(ip);
+    public String valid(String name) {
+        return serverDAO.valid(name);
     }
 
     @Override
-    public Streams services(String ip) {
-        return serverDAO.services(ip);
+    public Streams services(String name) {
+        return serverDAO.services(name);
     }
 
     @Override
-    public Streams kill(String ip, Long pid) {
-        return serverDAO.kill(ip, pid);
+    public Streams kill(String name, Long pid) {
+        return serverDAO.kill(name, pid);
     }
 
     @Override
-    public Streams operLogs(String ip) {
-        return serverDAO.operLogs(ip);
+    public Streams operLogs(String name) {
+        return serverDAO.operLogs(name);
     }
 
     @Override
-    public Streams loginLogs(String ip) {
-        return serverDAO.loginLogs(ip);
+    public Streams loginLogs(String name) {
+        return serverDAO.loginLogs(name);
     }
 }

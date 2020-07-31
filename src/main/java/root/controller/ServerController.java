@@ -26,8 +26,8 @@ public class ServerController {
 
     @RequestMapping(method = RequestMethod.DELETE, path = "/server")
     @ResponseBody
-    public Boolean del(String ip) {
-        return serverService.del(ip);
+    public Boolean del(String name) {
+        return serverService.del(name);
     }
 
     @RequestMapping(method = RequestMethod.PUT, path = "/server")

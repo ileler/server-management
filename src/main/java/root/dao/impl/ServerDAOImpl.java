@@ -21,14 +21,15 @@ public class ServerDAOImpl implements ServerDAO {
 
     @Override
     public Boolean add(Server server) {
+        if (get(server.getName()) != null) return false;
         objectDB.addData(server);
         return true;
     }
 
     @Override
-    public Boolean del(String ip) {
-        if (StringUtils.isEmpty(ip)) return false;
-        Server server = get(ip);
+    public Boolean del(String name) {
+        if (StringUtils.isEmpty(name)) return false;
+        Server server = get(name);
         if (server != null) objectDB.delData(server);
         return true;
     }
@@ -47,12 +48,12 @@ public class ServerDAOImpl implements ServerDAO {
     }
 
     @Override
-    public Server get(String ip) {
-        if (StringUtils.isEmpty(ip)) return null;
+    public Server get(String name) {
+        if (StringUtils.isEmpty(name)) return null;
         List<Server> servers = get();
         if (servers == null) return null;
         for (Server server : servers) {
-            if (server != null && ip.equals(server.getIp())) {
+            if (server != null && name.equals(server.getName())) {
                 return server;
             }
         }
@@ -60,36 +61,36 @@ public class ServerDAOImpl implements ServerDAO {
     }
 
     @Override
-    public String valid(String ip) {
-        Server server = get(ip);
+    public String valid(String name) {
+        Server server = get(name);
         if (server == null) return null;
         return JschUtil.connect(server);
     }
 
     @Override
-    public Streams services(String ip) {
-        Server server = get(ip);
+    public Streams services(String name) {
+        Server server = get(name);
         if (server == null) return null;
         return JschUtil.executeCommand(server, "bash --login -c 'jps -mlv'");
     }
 
     @Override
-    public Streams kill(String ip, Long pid) {
-        Server server = get(ip);
+    public Streams kill(String name, Long pid) {
+        Server server = get(name);
         if (server == null) return null;
         return JschUtil.executeCommand(server, "kill -9 " + pid);
     }
 
     @Override
-    public Streams operLogs(String ip) {
-        Server server = get(ip);
+    public Streams operLogs(String name) {
+        Server server = get(name);
         if (server == null) return null;
         return JschUtil.executeCommand(server, "cd /var/log && cat syslog");
     }
 
     @Override
-    public Streams loginLogs(String ip) {
-        Server server = get(ip);
+    public Streams loginLogs(String name) {
+        Server server = get(name);
         if (server == null) return null;
         return JschUtil.executeCommand(server, "last -50");
     }

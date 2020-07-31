@@ -167,7 +167,7 @@
       },
 
       save () {
-        this.valid && this.$emit(this.editedIndex > -1 ? 'mod' : 'add', Object.assign({}, this.editedItem)) && this.close();
+        this.valid && this.$emit(this.editedIndex > -1 ? 'mod' : 'add', Object.assign({}, this.editedItem));
       },
 
       filter (items, query, itemsKey) {

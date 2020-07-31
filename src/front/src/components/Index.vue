@@ -1,14 +1,14 @@
 <template>
     <div>
-        <Table title="Groups" :fields="groupsFields" :headers="groupsHeaders" :loading="groupsLoading"
+        <Table ref="groupsTable" title="Groups" :fields="groupsFields" :headers="groupsHeaders" :loading="groupsLoading"
                :list="groupsList"
                v-on:load="groupsLoad" v-on:add="groupsAdd" v-on:mod="groupsMod" v-on:del="groupsDel"/>
         <hr/>
-        <Table title="Servers" :fields="serversFields" :headers="serversHeaders" :loading="serversLoading"
+        <Table ref="serversTable" title="Servers" :fields="serversFields" :headers="serversHeaders" :loading="serversLoading"
                :list="serversList"
                v-on:load="serversLoad" v-on:add="serversAdd" v-on:mod="serversMod" v-on:del="serversDel"/>
         <hr/>
-        <Table title="Services" :fields="servicesFields" :headers="servicesHeaders" :loading="servicesLoading"
+        <Table ref="servicesTable" title="Services" :fields="servicesFields" :headers="servicesHeaders" :loading="servicesLoading"
                :list="servicesList"
                v-on:load="servicesLoad" v-on:add="servicesAdd" v-on:mod="servicesMod" v-on:del="servicesDel"/>
     </div>
@@ -99,7 +99,7 @@
     const ServiceProxy = {
         add: (path, callback) => (function (item) {
             let result;
-            HTTP.put('/' + path, item)
+            HTTP.post('/' + path, item)
                 .then((function (response) {
                     console.log(response);
                     result = response.data;
@@ -110,12 +110,12 @@
                 }).bind(this))
                 .then((function () {
                     // always executed
-                    result && callback(item);
+                    result ? callback(item) : setTimeout(() => alert('Data already exists or the system is abnormal.'), 500);
                 }).bind(index));
         }),
-        del: (path, key, callback) => (function (item) {
+        del: (path, callback) => (function (item) {
             let result;
-            HTTP.delete('/' + path + '?' + key + '=' + item.name)
+            HTTP.delete('/' + path + '?name=' + item.name)
                 .then((function (response) {
                     console.log(response);
                     result = response.data;
@@ -182,9 +182,9 @@
         },
         methods: {
             groupsLoad: ServiceProxy.get('groups', 'groupsLoading', (items) => GroupsListProxy.set(items)),
-            groupsAdd: ServiceProxy.add('group', () => index.groupsLoad()),
-            groupsMod: ServiceProxy.add('group', () => index.groupsLoad()),
-            groupsDel: ServiceProxy.del('group', 'name', () => index.groupsLoad()),
+            groupsAdd: ServiceProxy.add('group', () => {index.$refs.groupsTable.close(); index.groupsLoad();}),
+            groupsMod: ServiceProxy.mod('group', () => {index.$refs.groupsTable.close(); index.groupsLoad();}),
+            groupsDel: ServiceProxy.del('group', () => index.groupsLoad()),
         }
     }
 
@@ -214,9 +214,9 @@
         },
         methods: {
             serversLoad: ServiceProxy.get('servers', 'serversLoading', (items) => ServersListProxy.set(items)),
-            serversAdd: ServiceProxy.add('server', () => index.serversLoad()),
-            serversMod: ServiceProxy.add('server', () => index.serversLoad()),
-            serversDel: ServiceProxy.del('server', 'ip', () => index.serversLoad()),
+            serversAdd: ServiceProxy.add('server', () => {index.$refs.serversTable.close(); index.serversLoad();}),
+            serversMod: ServiceProxy.mod('server', () => {index.$refs.serversTable.close(); index.serversLoad();}),
+            serversDel: ServiceProxy.del('server', () => index.serversLoad()),
         }
     }
 
@@ -242,9 +242,9 @@
         },
         methods: {
             servicesLoad: ServiceProxy.get('services', 'servicesLoading', (items) => ServicesListProxy.set(items)),
-            servicesAdd: ServiceProxy.add('service', () => index.servicesLoad()),
-            servicesMod: ServiceProxy.add('service', () => index.servicesLoad()),
-            servicesDel: ServiceProxy.del('service', 'name', () => index.servicesLoad()),
+            servicesAdd: ServiceProxy.add('service', () => {index.$refs.servicesTable.close(); index.servicesLoad();}),
+            servicesMod: ServiceProxy.mod('service', () => {index.$refs.servicesTable.close(); index.servicesLoad();}),
+            servicesDel: ServiceProxy.del('service', () => index.servicesLoad()),
         }
     }
 
