@@ -1,6 +1,7 @@
 package root.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import root.dao.ServiceDAO;
 import root.model.Service;
 import root.service.ServiceService;
@@ -19,7 +20,14 @@ public class ServiceServiceImpl implements ServiceService {
     }
 
     @Override
-    public Boolean del(String name) {
+    public Boolean del(String name, String server) {
+        if (!StringUtils.isEmpty(server)) {
+            List<Service> services = get(server);
+            for (Service service : services) {
+                serviceDAO.del(service.getName());
+            }
+            return true;
+        }
         return serviceDAO.del(name);
     }
 
@@ -30,6 +38,6 @@ public class ServiceServiceImpl implements ServiceService {
 
     @Override
     public List<Service> get(String server) {
-        return serviceDAO.get();
+        return serviceDAO.getByServer(server);
     }
 }

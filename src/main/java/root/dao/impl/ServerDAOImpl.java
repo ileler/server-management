@@ -9,6 +9,7 @@ import root.util.JschUtil;
 import root.util.ObjectDB;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Repository
 public class ServerDAOImpl implements ServerDAO {
@@ -43,14 +44,18 @@ public class ServerDAOImpl implements ServerDAO {
     }
 
     @Override
-    public List<Server> get() {
-        return objectDB.getData();
+    public List<Server> getByGroup(String group) {
+        List<Server> list = objectDB.getData();
+        if (!StringUtils.isEmpty(group)) {
+            return list.stream().filter(data -> data.getGroup().equals(group)).collect(Collectors.toList());
+        }
+        return list;
     }
 
     @Override
     public Server get(String name) {
         if (StringUtils.isEmpty(name)) return null;
-        List<Server> servers = get();
+        List<Server> servers = getByGroup(null);
         if (servers == null) return null;
         for (Server server : servers) {
             if (server != null && name.equals(server.getName())) {

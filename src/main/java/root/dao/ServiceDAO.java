@@ -12,7 +12,7 @@ public interface ServiceDAO {
 
     Boolean mod(Service service);
 
-    List<Service> get();
+    List<Service> getByServer(String server);
 
     Service get(String name);
 

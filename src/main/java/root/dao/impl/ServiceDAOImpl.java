@@ -7,6 +7,7 @@ import root.model.Service;
 import root.util.ObjectDB;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Repository
 public class ServiceDAOImpl implements ServiceDAO {
@@ -41,14 +42,18 @@ public class ServiceDAOImpl implements ServiceDAO {
     }
 
     @Override
-    public List<Service> get() {
-        return objectDB.getData();
+    public List<Service> getByServer(String server) {
+        List<Service> list = objectDB.getData();
+        if (!StringUtils.isEmpty(server)) {
+            return list.stream().filter(data -> data.getServer().equals(server)).collect(Collectors.toList());
+        }
+        return list;
     }
 
     @Override
     public Service get(String name) {
         if (StringUtils.isEmpty(name)) return null;
-        List<Service> services = get();
+        List<Service> services = getByServer(null);
         if (services == null) return null;
         for (Service service : services) {
             if (service != null && name.equals(service.getName())) {

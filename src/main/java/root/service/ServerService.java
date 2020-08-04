@@ -9,7 +9,7 @@ public interface ServerService {
 
     Boolean add(Server server);
 
-    Boolean del(String name);
+    Boolean del(String name, String group, boolean forced);
 
     Boolean mod(Server server);
 

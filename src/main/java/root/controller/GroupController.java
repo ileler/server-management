@@ -1,13 +1,13 @@
 package root.controller;
 
-import root.model.Group;
-import root.service.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import root.model.Group;
+import root.service.GroupService;
 
 import java.util.List;
 
@@ -25,8 +25,8 @@ public class GroupController {
 
     @RequestMapping(method = RequestMethod.DELETE, path = "/group")
     @ResponseBody
-    public Boolean del(String name) {
-        return envService.del(name);
+    public Boolean del(String name, boolean forced) {
+        return envService.del(name, forced);
     }
 
     @RequestMapping(method = RequestMethod.PUT, path = "/group")

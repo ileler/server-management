@@ -113,9 +113,9 @@
                     result ? callback(item) : setTimeout(() => alert('Data already exists or the system is abnormal.'), 500);
                 }).bind(index));
         }),
-        del: (path, callback) => (function (item) {
+        del: (path, callback, confirm) => (function (item, forced) {
             let result;
-            HTTP.delete('/' + path + '?name=' + item.name)
+            HTTP.delete('/' + path + '?name=' + item.name + '&forced=' + (forced === true))
                 .then((function (response) {
                     console.log(response);
                     result = response.data;
@@ -126,7 +126,7 @@
                 }).bind(this))
                 .then((function () {
                     // always executed
-                    result && callback(item);
+                    result ? callback(item) : confirm(item);
                 }).bind(this));
         }),
         mod: (path, callback) => (function (item) {
@@ -173,7 +173,7 @@
             groupsLoading: false,
             groupsList: [],
             groupsFields: [
-                {name: 'name', label: 'Name', noEditingAllowed: true, rules: [FormRules.required, FormRules.counter({max: 50})]},
+                {name: 'name', label: 'Name(ID)', noEditingAllowed: true, rules: [FormRules.required, FormRules.counter({max: 50})]},
             ],
             groupsHeaders: [
                 {text: 'Name(ID)', value: 'name'},
@@ -184,7 +184,7 @@
             groupsLoad: ServiceProxy.get('groups', 'groupsLoading', (items) => GroupsListProxy.set(items)),
             groupsAdd: ServiceProxy.add('group', () => {index.$refs.groupsTable.close(); index.groupsLoad();}),
             groupsMod: ServiceProxy.mod('group', () => {index.$refs.groupsTable.close(); index.groupsLoad();}),
-            groupsDel: ServiceProxy.del('group', () => index.groupsLoad()),
+            groupsDel: ServiceProxy.del('group', () => {index.groupsLoad(); index.serversLoad(); index.servicesLoad(); index.$refs.groupsTable.doneDel();}, () => {index.$refs.groupsTable.confirmDel()}),
         }
     }
 
@@ -193,7 +193,7 @@
             serversLoading: false,
             serversList: [],
             serversFields: [
-                {name: 'name', label: 'Name', noEditingAllowed: true, rules: [FormRules.required, FormRules.counter({max: 50})]},
+                {name: 'name', label: 'Name(ID)', noEditingAllowed: true, rules: [FormRules.required, FormRules.counter({max: 50})]},
                 {name: 'group', label: 'Group', items: [], rules: [FormRules.required]},
                 {name: 'ip', label: 'IP', rules: [FormRules.required, FormRules.ip]},
                 {name: 'port', label: 'Port', default: 22, rules: [FormRules.required, FormRules.port]},
@@ -216,7 +216,7 @@
             serversLoad: ServiceProxy.get('servers', 'serversLoading', (items) => ServersListProxy.set(items)),
             serversAdd: ServiceProxy.add('server', () => {index.$refs.serversTable.close(); index.serversLoad();}),
             serversMod: ServiceProxy.mod('server', () => {index.$refs.serversTable.close(); index.serversLoad();}),
-            serversDel: ServiceProxy.del('server', () => index.serversLoad()),
+            serversDel: ServiceProxy.del('server', () => {index.serversLoad(); index.servicesLoad(); index.$refs.serversTable.doneDel();}, () => {index.$refs.serversTable.confirmDel()}),
         }
     }
 
@@ -225,7 +225,7 @@
             servicesLoading: false,
             servicesList: [],
             servicesFields: [
-                {name: 'name', label: 'Name', noEditingAllowed: true, rules: [FormRules.required, FormRules.counter({max: 50})]},
+                {name: 'name', label: 'Name(ID)', noEditingAllowed: true, rules: [FormRules.required, FormRules.counter({max: 50})]},
                 {name: 'server', label: 'Server', items: [], rules: [FormRules.required]},
                 {name: 'desc', label: 'Desc'},
                 {name: 'type', label: 'Type'},

@@ -8,7 +8,7 @@ public interface GroupService {
 
     Boolean add(Group env);
 
-    Boolean del(String name);
+    Boolean del(String name, boolean forced);
 
     Boolean mod(Group env);
 

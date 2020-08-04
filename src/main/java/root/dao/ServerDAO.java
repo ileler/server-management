@@ -13,7 +13,7 @@ public interface ServerDAO {
 
     Boolean mod(Server server);
 
-    List<Server> get();
+    List<Server> getByGroup(String group);
 
     Server get(String name);
 

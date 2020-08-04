@@ -2,10 +2,13 @@ package root.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 import root.dao.ServerDAO;
 import root.model.Server;
 import root.model.Streams;
 import root.service.ServerService;
+import root.service.ServiceService;
 
 import java.util.List;
 
@@ -15,13 +18,33 @@ public class ServerServiceImpl implements ServerService {
     @Autowired
     private ServerDAO serverDAO;
 
+    @Autowired
+    private ServiceService serviceService;
+
     @Override
     public Boolean add(Server server) {
         return serverDAO.add(server);
     }
 
     @Override
-    public Boolean del(String name) {
+    public Boolean del(String name, String group, boolean forced) {
+        if (!StringUtils.isEmpty(group)) {
+            List<Server> servers = get(group);
+            for (Server server : servers) {
+                if (forced) {
+                    serviceService.del(null, server.getName());
+                } else {
+                    if (!CollectionUtils.isEmpty(serviceService.get(name))) continue;
+                }
+                serverDAO.del(server.getName());
+            }
+            return true;
+        }
+        if (forced) {
+            serviceService.del(null, name);
+        } else {
+            if (!CollectionUtils.isEmpty(serviceService.get(name))) return false;
+        }
         return serverDAO.del(name);
     }
 
@@ -32,7 +55,7 @@ public class ServerServiceImpl implements ServerService {
 
     @Override
     public List<Server> get(String group) {
-        return serverDAO.get();
+        return serverDAO.getByGroup(group);
     }
 
     @Override

@@ -8,7 +8,7 @@ public interface ServiceService {
 
     Boolean add(Service service);
 
-    Boolean del(String name);
+    Boolean del(String name, String server);
 
     Boolean mod(Service service);
 

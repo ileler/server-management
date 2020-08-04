@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import root.model.Group;
 import root.model.Server;
 import root.service.ServerService;
 
@@ -26,8 +25,8 @@ public class ServerController {
 
     @RequestMapping(method = RequestMethod.DELETE, path = "/server")
     @ResponseBody
-    public Boolean del(String name) {
-        return serverService.del(name);
+    public Boolean del(String name, String group, boolean forced) {
+        return serverService.del(name, group, forced);
     }
 
     @RequestMapping(method = RequestMethod.PUT, path = "/server")
