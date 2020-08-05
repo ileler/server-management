@@ -38,7 +38,7 @@ public class ServerDAOImpl implements ServerDAO {
     @Override
     public Boolean mod(Server server) {
         if (server == null) return false;
-        del(server.getIp());
+        del(server.getName());
         objectDB.addData(server);
         return true;
     }

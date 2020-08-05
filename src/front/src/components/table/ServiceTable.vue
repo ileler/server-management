@@ -37,7 +37,7 @@
                 ],
                 headers: [
                     {text: 'Name(ID)', value: 'name'},
-                    {text: 'Server', value: 'server'},
+                    {text: 'Server', value: 'serverID'},
                     {text: 'Desc', value: 'desc'},
                     {text: 'Type', value: 'type'},
                     {text: 'User', value: 'user'},
@@ -49,7 +49,11 @@
         watch: {
             serverList: {
                 handler: function (serverList) {
-                    this.fields[1].items = serverList;
+                    let serverMap = {};
+                    (this.fields[1].items = serverList).forEach(item => {
+                        serverMap[item.value] = item.text;
+                    });
+                    this.serverMap = serverMap;
                 },
                 deep: true
             }
@@ -90,7 +94,7 @@
                 HTTP.get('/services', (result) => {
                     this.loading = false;
                     if (result instanceof Array) {
-                        this.list = result;
+                        (this.list = result).forEach(item => item.serverID = this.serverMap[item.server]);
                     } else {
                         alert('System is abnormal.');
                     }
