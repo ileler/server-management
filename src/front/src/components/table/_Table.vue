@@ -1,6 +1,7 @@
 <template>
     <v-data-table
             loading-text="Loading... Please wait"
+            :items-per-page="5"
             :loading="loading"
             :headers="headers"
             :items="list"
